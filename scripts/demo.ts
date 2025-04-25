@@ -1,6 +1,5 @@
 import { Scope } from '../src/';
 import {
-  address,
   AddressesByLookupTableAddress,
   addSignersToTransactionMessage,
   appendTransactionMessageInstructions,
@@ -10,7 +9,6 @@ import {
   createSolanaRpcSubscriptions,
   createTransactionMessage,
   GetLatestBlockhashApi,
-  getProgramDerivedAddress,
   getSignatureFromTransaction,
   IInstruction,
   pipe,
@@ -28,14 +26,7 @@ import {
 } from '@solana/kit';
 import fs from 'fs';
 import { OracleType } from '../src/@codegen/scope/types';
-
-export const makeFeedIdBytes = (feedId: string) => {
-  return Buffer.from(feedId.padEnd(32, '\0'));
-};
-
-export const makePriceSeed = () => {
-  return Buffer.from('price'.padEnd(32, '\0'));
-};
+import { feedPda } from './redstone-utils';
 
 export async function fetchBlockhash(rpc: Rpc<GetLatestBlockhashApi>) {
   const res = await rpc.getLatestBlockhash({ commitment: 'finalized' }).send();
@@ -44,13 +35,6 @@ export async function fetchBlockhash(rpc: Rpc<GetLatestBlockhashApi>) {
     lastValidBlockHeight: res.value.lastValidBlockHeight,
     slot: res.context.slot,
   };
-}
-export async function feedPda(feed: string) {
-  const [addr] = await getProgramDerivedAddress({
-    seeds: [makePriceSeed(), makeFeedIdBytes(feed)],
-    programAddress: address('rds8J7VKqLQgzDr7vS59dkQga3B1BotgFy8F7LSLC74'),
-  });
-  return addr;
 }
 
 export type ConnectionPool = {
@@ -92,7 +76,7 @@ const redStoneDemo = async (feed: string) => {
 
   const ws = createSolanaRpcSubscriptions('ws://api.testnet.solana.com');
   const scope = new Scope('testnet', connection);
-  const keypairFile = fs.readFileSync('/Users/jankoscisz/solana-keypair.json');
+  const keypairFile = fs.readFileSync('fill');
   const keypairBytes = new Uint8Array(JSON.parse(keypairFile.toString()));
   const keypair = await createKeyPairSignerFromBytes(keypairBytes);
 

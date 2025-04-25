@@ -118,7 +118,7 @@ export class CToken {
     }
   }
 }
-export interface RedStoneJson {
+export interface RedStoneJSON {
   kind: "RedStone"
 }
 
@@ -128,7 +128,7 @@ export class RedStone {
   readonly discriminator = 29
   readonly kind = "RedStone"
 
-  toJSON(): RedStoneJson {
+  toJSON(): RedStoneJSON {
     return {
       kind: "RedStone",
     }
