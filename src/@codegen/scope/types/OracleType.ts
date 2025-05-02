@@ -118,6 +118,28 @@ export class CToken {
     }
   }
 }
+export interface RedStoneJSON {
+  kind: "RedStone"
+}
+
+export class RedStone {
+  static readonly discriminator = 29
+  static readonly kind = "RedStone"
+  readonly discriminator = 29
+  readonly kind = "RedStone"
+
+  toJSON(): RedStoneJSON {
+    return {
+      kind: "RedStone",
+    }
+  }
+
+  toEncodable() {
+    return {
+      RedStone: {},
+    }
+  }
+}
 
 export interface SplStakeJSON {
   kind: "SplStake"
@@ -634,6 +656,9 @@ export function fromDecoded(obj: any): types.OracleTypeKind {
   if ("FixedPrice" in obj) {
     return new FixedPrice()
   }
+  if ("RedStone" in obj) {
+    return new RedStone()
+  }
 
   throw new Error("Invalid enum object")
 }
@@ -712,6 +737,9 @@ export function fromJSON(obj: types.OracleTypeJSON): types.OracleTypeKind {
     case "FixedPrice": {
       return new FixedPrice()
     }
+    case "RedStone": {
+      return new RedStone()
+    }
   }
 }
 
@@ -741,6 +769,7 @@ export function layout(property?: string) {
     borsh.struct([], "PythPullBased"),
     borsh.struct([], "PythPullBasedEMA"),
     borsh.struct([], "FixedPrice"),
+    borsh.struct([], "RedStone"),
   ])
   if (property !== undefined) {
     return ret.replicate(property)

@@ -90,6 +90,7 @@ export type OracleTypeKind =
   | OracleType.PythPullBased
   | OracleType.PythPullBasedEMA
   | OracleType.FixedPrice
+  | OracleType.RedStone
 export type OracleTypeJSON =
   | OracleType.PythJSON
   | OracleType.DeprecatedPlaceholder1JSON
@@ -115,6 +116,7 @@ export type OracleTypeJSON =
   | OracleType.PythPullBasedJSON
   | OracleType.PythPullBasedEMAJSON
   | OracleType.FixedPriceJSON
+  | OracleType.RedStoneJSON
 
 export { EmaType }
 

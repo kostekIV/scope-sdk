@@ -13,7 +13,14 @@ import {
 import Decimal from 'decimal.js';
 import { Configuration, OracleMappings, OraclePrices } from './@codegen/scope/accounts';
 import { OracleType, OracleTypeKind, Price } from './@codegen/scope/types';
-import { SCOPE_DEVNET_CONFIG, SCOPE_LOCALNET_CONFIG, SCOPE_MAINNET_CONFIG, ScopeConfig, U16_MAX } from './constants';
+import {
+  SCOPE_DEVNET_CONFIG,
+  SCOPE_LOCALNET_CONFIG,
+  SCOPE_MAINNET_CONFIG,
+  SCOPE_TESTNET_CONFIG,
+  ScopeConfig,
+  U16_MAX,
+} from './constants';
 import * as ScopeIx from './@codegen/scope/instructions';
 import {
   getConfigurationPda,
@@ -45,7 +52,7 @@ export class Scope {
    * @param cluster Name of the Solana cluster
    * @param rpc Connection to the Solana rpc
    */
-  constructor(cluster: 'localnet' | 'devnet' | 'mainnet-beta', rpc: Rpc<SolanaRpcApiMainnet>) {
+  constructor(cluster: 'localnet' | 'devnet' | 'mainnet-beta' | 'testnet', rpc: Rpc<SolanaRpcApiMainnet>) {
     this._rpc = rpc;
     switch (cluster) {
       case 'localnet':
@@ -56,6 +63,10 @@ export class Scope {
         break;
       case 'mainnet-beta': {
         this._config = SCOPE_MAINNET_CONFIG;
+        break;
+      }
+      case 'testnet': {
+        this._config = SCOPE_TESTNET_CONFIG;
         break;
       }
       default: {
